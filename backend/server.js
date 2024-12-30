@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 5000;
 const authRoutes = require('./src/users/user.route.js')
+const authModels = require('./src/users/user.models.js')
 //
 
 // middleware 
@@ -21,7 +22,7 @@ app.use(cors({
 }))
 
 //routes 
-
+app.use('/api/auth', authRoutes)
 
 main()
     .then(() => console.log("MongoDB successfully connected"))
