@@ -74,7 +74,7 @@ export default function Navbar() {
 				{/* logo */}
 				<div className='nav__logo'>
 					<Link to='/'>
-						The Greeb Republic<span>.</span>
+						The Green Republic<span>.</span>
 					</Link>
 				</div>
 
@@ -98,7 +98,7 @@ export default function Navbar() {
 							<>
 								<img
 									src={user?.profileImage || avatarImg}
-									alt=''
+									alt='Members'
 									className='rounded-full cursor-pointer size-6'
 									onClick={handDropDownToggle}
 								/>
