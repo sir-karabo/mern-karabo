@@ -27,4 +27,4 @@ export const store = configureStore({
 			ordersApi.middleware,
 			statsApi.middleware
 		),
-})
+}) 
