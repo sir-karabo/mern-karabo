@@ -23,9 +23,9 @@ export default function SingleProduct() {
 
 	return (
 		<>
-			<section className='section__container bg-primary-light'>
-				<h2 className='section__header capitalize'>Single Product Page</h2>
-				<div className='section__subheader space-x-2'>
+			<section className='bg-primary-light section__container'>
+				<h2 className='capitalize section__header'>Single Product Page</h2>
+				<div className='space-x-2 section__subheader'>
 					<span className='hover:text-primary'>
 						<Link to='/'>home</Link>
 					</span>
@@ -38,10 +38,10 @@ export default function SingleProduct() {
 				</div>
 			</section>
 
-			<section className='section__container mt-8'>
-				<div className='flex flex-col items-center md:flex-row gap-8'>
+			<section className='mt-8 section__container'>
+				<div className='flex md:flex-row flex-col items-center gap-8'>
 					{/* product image */}
-					<div className='md:w-1/2 w-full'>
+					<div className='w-full md:w-1/2'>
 						<img
 							src={singleProduct?.image}
 							alt=''
@@ -49,17 +49,17 @@ export default function SingleProduct() {
 						/>
 					</div>
 
-					<div className='md:w-1/2 w-full'>
-						<h3 className='text-2xl font-semibold mb-4'>
+					<div className='w-full md:w-1/2'>
+						<h3 className='mb-4 font-semibold text-2xl'>
 							{singleProduct?.name}
 						</h3>
-						<p className='text-xl text-primary mb-4 space-x-1'>
+						<p className='space-x-1 mb-4 text-primary text-xl'>
 							${singleProduct?.price}
 							{singleProduct?.oldPrice && (
 								<s className='ml-1'>${singleProduct?.oldPrice}</s>
 							)}
 						</p>
-						<p className='text-gray-400 mb-4'>{singleProduct?.description}</p>
+						<p className='mb-4 text-green-600'>{singleProduct?.description}</p>
 
 						{/* additional product info */}
 						<div className='flex flex-col space-y-2'>
@@ -69,7 +69,7 @@ export default function SingleProduct() {
 							<p>
 								<strong>Color:</strong> {singleProduct?.color}
 							</p>
-							<div className='flex gap-1 items-center'>
+							<div className='flex items-center gap-1'>
 								<strong>Rating: </strong>
 								<RatingStars rating={singleProduct?.rating} />
 							</div>
@@ -80,7 +80,7 @@ export default function SingleProduct() {
 								e.stopPropagation()
 								handleAddToCart(singleProduct)
 							}}
-							className='mt-6 px-6 py-3 bg-primary text-white rounded-md'
+							className='bg-primary mt-6 px-6 py-3 rounded-md text-white'
 						>
 							Add to Cart
 						</button>
@@ -89,7 +89,7 @@ export default function SingleProduct() {
 			</section>
 
 			{/* display Reviews */}
-			<section className='section__container mt-8'>
+			<section className='mt-8 section__container'>
 				<ReviewsCard productReviews={productReviews} />
 			</section>
 		</>

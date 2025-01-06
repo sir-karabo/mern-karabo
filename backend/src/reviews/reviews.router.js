@@ -16,7 +16,7 @@ router.post('/post-review', async (req, res) => {
 		const existingReview = await Reviews.findOne({ productId, userId })
 
 		if (existingReview) {
-			//    update reviews
+			//    update reviews 
 			existingReview.comment = comment
 			existingReview.rating = rating
 			await existingReview.save()

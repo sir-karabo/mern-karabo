@@ -9,6 +9,7 @@ const port = process.env.PORT || 5000;
 //auth routes
 const authRoutes = require('./src/users/user.route')
 const productsRoutes = require('./src/products/products.route')
+const reviewsRouter = require('./src/reviews/reviews.router')
 
 // middleware 
 app.use(express.json({ limit: "25mb" }));
@@ -23,6 +24,7 @@ app.use(cors({
 //routes 
 app.use('/api/auth', authRoutes)
 app.use('/api/products', productsRoutes)
+app.use('/api/reviews', reviewsRouter)
 
 main()
     .then(() => console.log("MongoDB successfully connected"))
@@ -33,7 +35,7 @@ async function main() {
     await mongoose.connect(process.env.MONGO_DB_URI);
 
     app.get('/', (req, res) => {
-        res.send('Sir Karabo E-commerce Server is running !')
+        res.send('The Green Republic E-commerce Server is running !')
     })
 }
 

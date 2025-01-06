@@ -2,41 +2,52 @@ const express = require('express')
 const router = express.Router()
 
 const Order = require('./orders.model')
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
+const axios = require('axios') // For HTTP requests to PayFast
+require('dotenv').config()
 
-// create checkout session
+// create checkout session with PayFast
 router.post('/create-checkout-session', async (req, res) => {
-	const { products } = req.body
+  const { products, email, amount } = req.body
+  const totalAmount = Math.round(amount * 100) // PayFast requires the amount in cents
+  const orderId = `order_${Date.now()}` // Unique order ID based on timestamp
 
-	try {
-		const lineItems = products.map((product) => ({
-			price_data: {
-				currency: 'usd',
-				product_data: {
-					name: product.name,
-					images: [product.image],
-				},
-				unit_amount: Math.round(product.price * 100),
-			},
-			quantity: product.quantity,
-		}))
+  // Extract the line items with colors for products
+  const lineItems = products.map((product) => ({
+    name: product.name,
+    quantity: product.quantity,
+    price: product.price,
+    color: product.color,  // Added the color field from your schema
+  }))
 
-		const session = await stripe.checkout.sessions.create({
-			payment_method_types: ['card'],
-			line_items: lineItems,
-			mode: 'payment',
-			success_url:
-				'http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}',
-			cancel_url: `http://localhost:5173/cancel`,
-		})
+  // Prepare the PayFast data
+  const payFastData = {
+    merchant_id: process.env.PAYFAST_MERCHANT_ID,
+    merchant_key: process.env.PAYFAST_MERCHANT_KEY,
+    amount: totalAmount,
+    item_name: lineItems.map(item => item.name).join(", "), // Concatenate item names for PayFast
+    item_description: lineItems.map(item => item.name).join(", "), // Same as item name
+    email_address: email,
+    return_url: 'http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}',
+    cancel_url: 'http://localhost:5173/cancel',
+    notify_url: 'http://localhost:5173/notify', // URL to handle IPN notifications
+    custom_int1: orderId, // Custom order ID
+    custom_str1: JSON.stringify(lineItems) // Save product info for later processing
+  }
 
-		res.json({ id: session.id })
-	} catch (error) {
-		console.error('Error creating checkout session:', error)
-		res.status(500).json({ error: 'Failed to create checkout session' })
-	}
+  try {
+    // Send data to PayFast for processing
+    const response = await axios.post(process.env.PAYFAST_URL, payFastData)
+
+    // Return the PayFast payment URL for the client to complete the payment
+    res.json({
+      payment_url: `https://www.payfast.co.za/eng/process?${new URLSearchParams(payFastData).toString()}`
+    })
+
+  } catch (error) {
+    console.error('Error creating PayFast checkout session:', error)
+    res.status(500).json({ error: 'Failed to create PayFast checkout session' })
+  }
 })
-
 //  confirm payment
 
 router.post('/confirm-payment', async (req, res) => {

@@ -5,13 +5,13 @@ import ShopFiltering from './shop-filtering'
 import { useFetchAllProductsQuery } from '../../redux/features/productsApi'
 
 const filters = {
-	categories: ['all', 'accessories', 'dress', 'jewellery', 'cosmetics'],
-	colors: ['all', 'black', 'red', 'gold', 'blue', 'silver', 'beige', 'green'],
+	categories: ['all', 'edibles', 'vapes', 'cbd', 'cosmetics'],
+	colors: ['all', 'Midnight Cocoa', 'Red Sour Apple glow', 'Golden Chamomile', 'Blue Haze', 'Lavendar Mist', 'Tropical Gold', 'Mint spark'],
 	priceRanges: [
-		{ label: 'Under $50', min: 0, max: 50 },
-		{ label: '$50 - $100', min: 50, max: 100 },
-		{ label: '$100 - $200', min: 100, max: 200 },
-		{ label: '$200 and above', min: 200, max: Infinity },
+		{ label: 'Under R50', min: 0, max: 50 },
+		{ label: 'R50 - R100', min: 150, max: 200 },
+		{ label: 'R100 - R200', min: 200, max: 300 },
+		{ label: 'R200 and above', min: 300, max: Infinity },
 	],
 }
 
@@ -63,10 +63,9 @@ export default function ShopPage() {
 	return (
 		<>
 			<section className='bg-primary-light section__container'>
-				<h2 className='capitalize section__header'>Shop Page</h2>
+				<h2 className='capitalize section__header'>Shop</h2>
 				<p className='section__subheader'>
-					Discover the Hottest Picks: Elevate Your Style with Our Curated
-					Collection of Trending Women&rsquo;s Fashion Products.
+					Discover the Hottest Picks: Elevate Your Style with Our Curate Our Collection of CBD Products.
 				</p>
 			</section>
 
@@ -100,7 +99,7 @@ export default function ShopPage() {
 							{[...Array(totalPages)].map((_, index) => (
 								<button
 									key={index}
-									className={`px-4 py-2 ${currentPage === index + 1
+									className={`px-4 py-2 R{currentPage === index + 1
 										? 'bg-blue-500 text-white'
 										: 'bg-gray-300 text-gray-700'
 										}
