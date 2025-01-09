@@ -10,6 +10,7 @@ const port = process.env.PORT || 5000;
 const authRoutes = require('./src/users/user.route')
 const productsRoutes = require('./src/products/products.route')
 const reviewsRouter = require('./src/reviews/reviews.router')
+const ordersRoutes = require('./src/orders/orders.route')
 
 // middleware 
 app.use(express.json({ limit: "25mb" }));
@@ -25,6 +26,7 @@ app.use(cors({
 app.use('/api/auth', authRoutes)
 app.use('/api/products', productsRoutes)
 app.use('/api/reviews', reviewsRouter)
+app.use('/api/orders', ordersRoutes)
 
 main()
     .then(() => console.log("MongoDB successfully connected"))

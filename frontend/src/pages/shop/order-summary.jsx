@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
 import { useDispatch, useSelector } from 'react-redux'
-import { loadStripe } from '@stripe/stripe-js'
-
 import { getBaseUrl } from '../../utils/base-url'
 import { clearCart } from '../../redux/features/cartSlice'
 
@@ -18,37 +16,37 @@ export default function OrderSummary() {
 		dispatch(clearCart())
 	}
 
-	const makePayment = async (e) => {
-		const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PK)
+	const makePayment = async () => {
 		const body = {
 			products: products,
-			userId: user?._id,
+			email: user?.email,
+			amount: grandTotal,
 		}
 
 		const headers = {
 			'Content-Type': 'application/json',
 		}
 
-		const response = await fetch(
-			`${getBaseUrl()}/api/orders/create-checkout-session`,
-			{
-				method: 'POST',
-				headers: headers,
-				body: JSON.stringify(body),
+		try {
+			// Create PayFast checkout session
+			const response = await fetch(
+				`${getBaseUrl()}/api/orders/create-checkout-session`,
+				{
+					method: 'POST',
+					headers: headers,
+					body: JSON.stringify(body),
+				}
+			)
+
+			const data = await response.json()
+			if (response.ok) {
+				// Redirect to PayFast payment URL
+				window.location.href = data.payment_url
+			} else {
+				console.error('Error creating PayFast session:', data.error)
 			}
-		)
-
-		const session = await response.json()
-		console.log('session: ', session)
-
-		const result = stripe.redirectToCheckout({
-			sessionId: session.id,
-		})
-
-		console.log('Result:', result)
-
-		if (result.error) {
-			console.log('Error:', result.error)
+		} catch (error) {
+			console.error('Error during payment:', error)
 		}
 	}
 
